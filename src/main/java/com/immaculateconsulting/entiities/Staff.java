@@ -60,7 +60,7 @@ public class Staff implements Serializable {
     private Date dateAdded;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "unitHead")
     private List<Division> divisionList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "member1")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "staffId")
     private List<TeamMembers> teamMembersList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "hod")
     private List<Department> departmentList;

@@ -2,10 +2,12 @@ package com.immaculateconsulting.control;
 
 import com.immaculateconsulting.boundary.TeamFacadeLocal;
 import com.immaculateconsulting.entiities.Team;
+import com.immaculateconsulting.util.Messages;
+import com.immaculateconsulting.util.StatusCode;
+import com.immaculateconsulting.util.StatusMessage;
+import java.util.Date;
 import java.util.List;
-import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -15,28 +17,55 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  *
  * @author Unogwudan
  */
-@Stateless
 @Path("teams")
 public class TeamFacadeREST {
 
+    @EJB
     private TeamFacadeLocal teamFacadeLocal;
-            
+    private StatusMessage response;
+
     @POST
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public void create(Team entity) {
-        teamFacadeLocal.create(entity);
+    public Response create(Team entity) {
+        try {
+            entity.setDateAdded(new Date());
+            teamFacadeLocal.create(entity);
+            response = new StatusMessage(StatusCode.SUCCESS, Messages.SUCCESS);
+            return Response.status(Response.Status.CREATED)
+                    .entity(response)
+                    .build();
+
+        } catch (Exception e) {
+            response = new StatusMessage(StatusCode.ERROR, Messages.ERROR);
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(response)
+                    .build();
+        }
     }
 
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public void edit(@PathParam("id") Integer id, Team entity) {
-        teamFacadeLocal.edit(entity);
+    public Response edit(@PathParam("id") Integer id, Team entity) {
+        try {
+            teamFacadeLocal.edit(entity);
+            response = new StatusMessage(StatusCode.SUCCESS, Messages.SUCCESS);
+            return Response.status(Response.Status.OK)
+                    .entity(response)
+                    .build();
+
+        } catch (Exception e) {
+            response = new StatusMessage(StatusCode.ERROR, Messages.ERROR);
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(response)
+                    .build();
+        }
     }
 
     @DELETE

@@ -57,7 +57,7 @@ public class Division implements Serializable {
     @JoinColumn(name = "unit_head", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Staff unitHead;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "divisonId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "divisionId")
     private List<Department> departmentList;
 
     public Division() {

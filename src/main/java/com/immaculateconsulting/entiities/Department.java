@@ -56,9 +56,9 @@ public class Department implements Serializable {
     private Date dateAdded;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "departmentId")
     private List<Team> teamList;
-    @JoinColumn(name = "divison_id", referencedColumnName = "id")
+    @JoinColumn(name = "division_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Division divisonId;
+    private Division divisionId;
     @JoinColumn(name = "hod", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Staff hod;
@@ -110,12 +110,12 @@ public class Department implements Serializable {
         this.teamList = teamList;
     }
 
-    public Division getDivisonId() {
-        return divisonId;
+    public Division getDivisionId() {
+        return divisionId;
     }
 
-    public void setDivisonId(Division divisonId) {
-        this.divisonId = divisonId;
+    public void setDivisionId(Division divisionId) {
+        this.divisionId = divisionId;
     }
 
     public Staff getHod() {

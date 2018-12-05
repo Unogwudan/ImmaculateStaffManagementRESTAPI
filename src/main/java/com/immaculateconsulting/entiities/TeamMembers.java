@@ -42,9 +42,9 @@ public class TeamMembers implements Serializable {
     @Column(name = "date_added")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateAdded;
-    @JoinColumn(name = "member", referencedColumnName = "id")
+    @JoinColumn(name = "staff_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Staff member;
+    private Staff staffId;
     @JoinColumn(name = "team_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Team teamId;
@@ -77,12 +77,12 @@ public class TeamMembers implements Serializable {
         this.dateAdded = dateAdded;
     }
 
-    public Staff getMember() {
-        return member;
+    public Staff getStaffId() {
+        return staffId;
     }
 
-    public void setMember(Staff member) {
-        this.member = member;
+    public void setStaffId(Staff staffId) {
+        this.staffId = staffId;
     }
 
     public Team getTeamId() {
