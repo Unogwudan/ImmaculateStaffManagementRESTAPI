@@ -1,10 +1,13 @@
 package com.immaculateconsulting.control;
 
 import com.immaculateconsulting.boundary.TeamMembersFacadeLocal;
-import com.immaculateconsulting.entiities.TeamMembers;
+import com.immaculateconsulting.entities.TeamMembers;
 import com.immaculateconsulting.util.Messages;
 import com.immaculateconsulting.util.StatusCode;
 import com.immaculateconsulting.util.StatusMessage;
+//import io.swagger.annotations.Api;
+//import io.swagger.annotations.SwaggerDefinition;
+//import io.swagger.annotations.Tag;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
@@ -24,11 +27,12 @@ import javax.ws.rs.core.Response;
  * @author Unogwudan
  */
 @Path("teammembers")
+//@Api("teammembers")
+//@SwaggerDefinition(tags={@Tag(name="Team Members Resource", description="REST Endpoint for Team Members Resource")})
 public class TeamMembersFacadeREST {
 
     @EJB
     private TeamMembersFacadeLocal teamMembersFacadeLocal;
-    private StatusMessage response;
 
     @POST
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -37,15 +41,13 @@ public class TeamMembersFacadeREST {
         try {
             entity.setDateAdded(new Date());
             teamMembersFacadeLocal.create(entity);
-            response = new StatusMessage(StatusCode.SUCCESS, Messages.SUCCESS);
             return Response.status(Response.Status.CREATED)
-                    .entity(response)
+                    .entity(new StatusMessage(StatusCode.SUCCESS, Messages.SUCCESS))
                     .build();
 
         } catch (Exception e) {
-            response = new StatusMessage(StatusCode.ERROR, Messages.ERROR);
             return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(response)
+                    .entity(new StatusMessage(StatusCode.ERROR, Messages.ERROR))
                     .build();
         }
     }
@@ -56,19 +58,24 @@ public class TeamMembersFacadeREST {
 
         try {
             teamMembersFacadeLocal.edit(entity);
-            response = new StatusMessage(StatusCode.SUCCESS, Messages.SUCCESS);
             return Response.status(Response.Status.OK)
-                    .entity(response)
+                    .entity(new StatusMessage(StatusCode.SUCCESS, Messages.SUCCESS))
                     .build();
 
         } catch (Exception e) {
-            response = new StatusMessage(StatusCode.ERROR, Messages.ERROR);
             return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(response)
+                    .entity(new StatusMessage(StatusCode.ERROR, Messages.ERROR))
                     .build();
         }
     }
 
+    @GET
+    @Path("team/{id}")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public List<TeamMembers> findByTeam(@PathParam("id") Integer id) {
+        return teamMembersFacadeLocal.findByTeam(id);
+    }
+    
     @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Integer id) {

@@ -1,10 +1,13 @@
-package com.immaculateconsulting.control;
+ package com.immaculateconsulting.control;
 
 import com.immaculateconsulting.boundary.DepartmentFacadeLocal;
-import com.immaculateconsulting.entiities.Department;
+import com.immaculateconsulting.entities.Department;
 import com.immaculateconsulting.util.Messages;
 import com.immaculateconsulting.util.StatusCode;
 import com.immaculateconsulting.util.StatusMessage;
+//import io.swagger.annotations.Api;
+//import io.swagger.annotations.SwaggerDefinition;
+//import io.swagger.annotations.Tag;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
@@ -24,6 +27,8 @@ import javax.ws.rs.core.Response;
  * @author Unogwudan
  */
 @Path("departments")
+//@Api("departments")
+//@SwaggerDefinition(tags={@Tag(name="Department Resource", description="REST Endpoint for Description Resource")})
 public class DepartmentFacadeREST {
 
     @EJB
@@ -36,15 +41,13 @@ public class DepartmentFacadeREST {
         try {
             entity.setDateAdded(new Date());
             departmentFacadeLocal.create(entity);
-            response = new StatusMessage(StatusCode.SUCCESS, Messages.SUCCESS);
             return Response.status(Response.Status.CREATED)
-                    .entity(response)
+                .entity(new StatusMessage(StatusCode.SUCCESS, Messages.SUCCESS))
                     .build();
-            
+
         } catch (Exception e) {
-            response = new StatusMessage(StatusCode.ERROR, Messages.ERROR);
             return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(response)
+                    .entity(new StatusMessage(StatusCode.ERROR, Messages.ERROR))
                     .build();
         }
     }
@@ -66,6 +69,13 @@ public class DepartmentFacadeREST {
                     .build();
         }
 
+    }
+    
+    @GET
+    @Path("division/{id}")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public List<Department> findByDivision(@PathParam("id") Integer id) {
+        return departmentFacadeLocal.findByDivision(id);
     }
 
     @DELETE

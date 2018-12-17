@@ -1,6 +1,6 @@
 package com.immaculateconsulting.boundary;
 
-import com.immaculateconsulting.entiities.TeamMembers;
+import com.immaculateconsulting.entities.TeamMembers;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -24,5 +24,7 @@ public interface TeamMembersFacadeLocal {
     List<TeamMembers> findRange(int[] range);
 
     int count();
+    
+    List<TeamMembers> findByTeam(Integer id);
     
 }

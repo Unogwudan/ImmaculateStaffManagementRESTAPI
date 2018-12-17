@@ -1,6 +1,6 @@
 package com.immaculateconsulting.boundary;
 
-import com.immaculateconsulting.entiities.Division;
+import com.immaculateconsulting.entities.Division;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

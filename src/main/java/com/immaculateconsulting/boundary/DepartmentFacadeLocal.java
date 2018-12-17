@@ -1,6 +1,6 @@
 package com.immaculateconsulting.boundary;
 
-import com.immaculateconsulting.entiities.Department;
+import com.immaculateconsulting.entities.Department;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -24,5 +24,7 @@ public interface DepartmentFacadeLocal {
     List<Department> findRange(int[] range);
 
     int count();
+
+    List<Department> findByDivision(Integer id);
     
 }

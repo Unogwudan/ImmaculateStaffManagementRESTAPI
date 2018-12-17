@@ -1,6 +1,6 @@
 package com.immaculateconsulting.boundary;
 
-import com.immaculateconsulting.entiities.Division;
+import com.immaculateconsulting.entities.Division;
 import java.util.List;
 import javax.ejb.Local;
 

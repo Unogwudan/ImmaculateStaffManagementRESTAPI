@@ -1,8 +1,11 @@
-package com.immaculateconsulting.entiities;
+package com.immaculateconsulting.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,24 +15,29 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Unogwudan
  */
 @Entity
-@Table(name = "team_members")
+@Table(name = "team")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "TeamMembers.findAll", query = "SELECT t FROM TeamMembers t")
-    , @NamedQuery(name = "TeamMembers.findById", query = "SELECT t FROM TeamMembers t WHERE t.id = :id")
-    , @NamedQuery(name = "TeamMembers.findByDateAdded", query = "SELECT t FROM TeamMembers t WHERE t.dateAdded = :dateAdded")})
-public class TeamMembers implements Serializable {
+    @NamedQuery(name = "Team.findAll", query = "SELECT t FROM Team t")
+    , @NamedQuery(name = "Team.findById", query = "SELECT t FROM Team t WHERE t.id = :id")
+    , @NamedQuery(name = "Team.findByName", query = "SELECT t FROM Team t WHERE t.name = :name")
+    , @NamedQuery(name = "Team.findByDepartment", query = "SELECT t FROM Team t WHERE t.departmentId = :departmentId")
+    , @NamedQuery(name = "Team.findByDateAdded", query = "SELECT t FROM Team t WHERE t.dateAdded = :dateAdded")})
+public class Team implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -39,25 +47,30 @@ public class TeamMembers implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @NotNull
+    @Size(min = 1, max = 45)
+    @Column(name = "name")
+    private String name;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "date_added")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateAdded;
-    @JoinColumn(name = "staff_id", referencedColumnName = "id")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "teamId")
+    private List<TeamMembers> teamMembersList;
+    @JoinColumn(name = "department_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Staff staffId;
-    @JoinColumn(name = "team_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private Team teamId;
+    private Department departmentId;
 
-    public TeamMembers() {
+    public Team() {
     }
 
-    public TeamMembers(Integer id) {
+    public Team(Integer id) {
         this.id = id;
     }
 
-    public TeamMembers(Integer id, Date dateAdded) {
+    public Team(Integer id, String name, Date dateAdded) {
         this.id = id;
+        this.name = name;
         this.dateAdded = dateAdded;
     }
 
@@ -69,6 +82,14 @@ public class TeamMembers implements Serializable {
         this.id = id;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public Date getDateAdded() {
         return dateAdded;
     }
@@ -77,20 +98,22 @@ public class TeamMembers implements Serializable {
         this.dateAdded = dateAdded;
     }
 
-    public Staff getStaffId() {
-        return staffId;
+    @JsonbTransient
+    @XmlTransient
+    public List<TeamMembers> getTeamMembersList() {
+        return teamMembersList;
     }
 
-    public void setStaffId(Staff staffId) {
-        this.staffId = staffId;
+    public void setTeamMembersList(List<TeamMembers> teamMembersList) {
+        this.teamMembersList = teamMembersList;
     }
 
-    public Team getTeamId() {
-        return teamId;
+    public Department getDepartmentId() {
+        return departmentId;
     }
 
-    public void setTeamId(Team teamId) {
-        this.teamId = teamId;
+    public void setDepartmentId(Department departmentId) {
+        this.departmentId = departmentId;
     }
 
     @Override
@@ -103,10 +126,10 @@ public class TeamMembers implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof TeamMembers)) {
+        if (!(object instanceof Team)) {
             return false;
         }
-        TeamMembers other = (TeamMembers) object;
+        Team other = (Team) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -115,7 +138,7 @@ public class TeamMembers implements Serializable {
 
     @Override
     public String toString() {
-        return "com.immaculateconsultingstaffmanagement.TeamMembers[ id=" + id + " ]";
+        return "com.immaculateconsultingstaffmanagement.Team[ id=" + id + " ]";
     }
     
 }

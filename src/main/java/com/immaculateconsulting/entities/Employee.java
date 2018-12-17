@@ -1,4 +1,4 @@
-package com.immaculateconsulting.entiities;
+package com.immaculateconsulting.entities;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -27,15 +27,19 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Unogwudan
  */
 @Entity
-@Table(name = "staff")
+@Table(name = "employee")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Staff.findAll", query = "SELECT s FROM Staff s")
-    , @NamedQuery(name = "Staff.findById", query = "SELECT s FROM Staff s WHERE s.id = :id")
-    , @NamedQuery(name = "Staff.findByFirstName", query = "SELECT s FROM Staff s WHERE s.firstName = :firstName")
-    , @NamedQuery(name = "Staff.findByLastName", query = "SELECT s FROM Staff s WHERE s.lastName = :lastName")
-    , @NamedQuery(name = "Staff.findByDateAdded", query = "SELECT s FROM Staff s WHERE s.dateAdded = :dateAdded")})
-public class Staff implements Serializable {
+    @NamedQuery(name = "Employee.findAll", query = "SELECT s FROM Employee s")
+    , @NamedQuery(name = "Employee.findById", query = "SELECT s FROM Employee s WHERE s.id = :id")
+    , @NamedQuery(name = "Employee.findByFirstName", query = "SELECT s FROM Employee s WHERE s.firstName = :firstName")
+    , @NamedQuery(name = "Employee.findByLastName", query = "SELECT s FROM Employee s WHERE s.lastName = :lastName")
+    , @NamedQuery(name = "Employee.findByEmail", query = "SELECT s FROM Employee s WHERE s.email = :email")
+    , @NamedQuery(name = "Employee.findByPassword", query = "SELECT s FROM Employee s WHERE s.password = :password")  
+    , @NamedQuery(name = "Employee.findByPhone", query = "SELECT s FROM Employee s WHERE s.phone = :phone") 
+    , @NamedQuery(name = "Employee.findByAddress", query = "SELECT s FROM Employee s WHERE s.address = :address") 
+    , @NamedQuery(name = "Employee.findByDateAdded", query = "SELECT s FROM Employee s WHERE s.dateAdded = :dateAdded")})
+public class Employee implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -48,11 +52,34 @@ public class Staff implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "first_name")
     private String firstName;
+    @Size(min = 1, max = 45)
+    @Column(name = "middle_name")
+    private String middleName;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
     @Column(name = "last_name")
     private String lastName;
+    @Size(min = 1, max = 45)
+    @Column(name = "email")
+    private String email;
+    @Size(min = 6, max = 45)
+    @Column(name = "password")
+    private String password;
+    @Size(min = 1, max = 15)
+    @Column(name = "phone")
+    private String phone;
+    @Size(min = 1, max = 120)
+    @Column(name = "address")
+    private String address;
+    @Column(name = "position")
+    private String position;
+    @Column(name = "account_name")
+    private String accountName;
+    @Column(name = "account_number")
+    private String accountNumber;
+    @Column(name = "salary")
+    private Double salary;
     @Basic(optional = false)
     @NotNull
     @Column(name = "date_added")
@@ -65,14 +92,14 @@ public class Staff implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "hod")
     private List<Department> departmentList;
 
-    public Staff() {
+    public Employee() {
     }
 
-    public Staff(Integer id) {
+    public Employee(Integer id) {
         this.id = id;
     }
 
-    public Staff(Integer id, String firstName, String lastName, Date dateAdded) {
+    public Employee(Integer id, String firstName, String lastName, Date dateAdded) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -95,6 +122,14 @@ public class Staff implements Serializable {
         this.firstName = firstName;
     }
 
+    public String getMiddleName() {
+        return middleName;
+    }
+
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
+    }
+
     public String getLastName() {
         return lastName;
     }
@@ -103,6 +138,72 @@ public class Staff implements Serializable {
         this.lastName = lastName;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public String getAccountName() {
+        return accountName;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+
+    public Double getSalary() {
+        return salary;
+    }
+
+    public void setSalary(Double salary) {
+        this.salary = salary;
+    }
+    
+    
+    
     public Date getDateAdded() {
         return dateAdded;
     }
@@ -152,10 +253,10 @@ public class Staff implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Staff)) {
+        if (!(object instanceof Employee)) {
             return false;
         }
-        Staff other = (Staff) object;
+        Employee other = (Employee) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }

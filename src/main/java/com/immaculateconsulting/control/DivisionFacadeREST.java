@@ -1,10 +1,13 @@
 package com.immaculateconsulting.control;
 
 import com.immaculateconsulting.boundary.DivisionFacadeLocal;
-import com.immaculateconsulting.entiities.Division;
+import com.immaculateconsulting.entities.Division;
 import com.immaculateconsulting.util.Messages;
 import com.immaculateconsulting.util.StatusCode;
 import com.immaculateconsulting.util.StatusMessage;
+//import io.swagger.annotations.Api;
+//import io.swagger.annotations.SwaggerDefinition;
+//import io.swagger.annotations.Tag;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
@@ -24,6 +27,8 @@ import javax.ws.rs.core.Response;
  * @author Unogwudan
  */
 @Path("divisions")
+//@Api("divisions")
+//@SwaggerDefinition(tags={@Tag(name="Division Resource", description="REST Endpoint for Division Resource")})
 public class DivisionFacadeREST {
 
     @EJB
@@ -42,15 +47,13 @@ public class DivisionFacadeREST {
         try {
             entity.setDateAdded(new Date());
             divisionFacadeLocal.create(entity);
-            response = new StatusMessage(StatusCode.SUCCESS, Messages.SUCCESS);
             return Response.status(Response.Status.CREATED)
-                    .entity(response)
+                    .entity(new StatusMessage(StatusCode.SUCCESS, Messages.SUCCESS))
                     .build();
 
         } catch (Exception e) {
-            response = new StatusMessage(StatusCode.ERROR, Messages.ERROR);
             return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(response)
+                    .entity(new StatusMessage(StatusCode.ERROR, Messages.ERROR))
                     .build();
         }
     }
@@ -66,17 +69,15 @@ public class DivisionFacadeREST {
     public Response edit(Division entity) {
         try {
             divisionFacadeLocal.edit(entity);
-            response = new StatusMessage(StatusCode.SUCCESS, Messages.SUCCESS);
             return Response.status(Response.Status.OK)
-                    .entity(response)
+                    .entity(new StatusMessage(StatusCode.SUCCESS, Messages.SUCCESS))
                     .build();
+
         } catch (Exception e) {
-            response = new StatusMessage(StatusCode.ERROR, Messages.ERROR);
             return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(response)
+                    .entity(new StatusMessage(StatusCode.ERROR, Messages.ERROR))
                     .build();
         }
-
     }
 
     @DELETE

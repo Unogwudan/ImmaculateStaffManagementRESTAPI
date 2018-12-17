@@ -1,4 +1,4 @@
-package com.immaculateconsulting.entiities;
+package com.immaculateconsulting.entities;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -29,14 +29,15 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Unogwudan
  */
 @Entity
-@Table(name = "division")
+@Table(name = "department")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Division.findAll", query = "SELECT d FROM Division d")
-    , @NamedQuery(name = "Division.findById", query = "SELECT d FROM Division d WHERE d.id = :id")
-    , @NamedQuery(name = "Division.findByName", query = "SELECT d FROM Division d WHERE d.name = :name")
-    , @NamedQuery(name = "Division.findByDateAdded", query = "SELECT d FROM Division d WHERE d.dateAdded = :dateAdded")})
-public class Division implements Serializable {
+    @NamedQuery(name = "Department.findAll", query = "SELECT d FROM Department d")
+    , @NamedQuery(name = "Department.findById", query = "SELECT d FROM Department d WHERE d.id = :id")
+    , @NamedQuery(name = "Department.findByName", query = "SELECT d FROM Department d WHERE d.name = :name")
+    , @NamedQuery(name = "Department.findByDivision", query = "SELECT d FROM Department d WHERE d.divisionId = :divisionId")
+    , @NamedQuery(name = "Department.findByDateAdded", query = "SELECT d FROM Department d WHERE d.dateAdded = :dateAdded")})
+public class Department implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -54,20 +55,23 @@ public class Division implements Serializable {
     @Column(name = "date_added")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateAdded;
-    @JoinColumn(name = "unit_head", referencedColumnName = "id")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "departmentId")
+    private List<Team> teamList;
+    @JoinColumn(name = "division_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Staff unitHead;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "divisionId")
-    private List<Department> departmentList;
+    private Division divisionId;
+    @JoinColumn(name = "hod", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Employee hod;
 
-    public Division() {
+    public Department() {
     }
 
-    public Division(Integer id) {
+    public Department(Integer id) {
         this.id = id;
     }
 
-    public Division(Integer id, String name, Date dateAdded) {
+    public Department(Integer id, String name, Date dateAdded) {
         this.id = id;
         this.name = name;
         this.dateAdded = dateAdded;
@@ -97,22 +101,30 @@ public class Division implements Serializable {
         this.dateAdded = dateAdded;
     }
 
-    public Staff getUnitHead() {
-        return unitHead;
-    }
-
-    public void setUnitHead(Staff unitHead) {
-        this.unitHead = unitHead;
-    }
-
     @JsonbTransient
     @XmlTransient
-    public List<Department> getDepartmentList() {
-        return departmentList;
+    public List<Team> getTeamList() {
+        return teamList;
     }
 
-    public void setDepartmentList(List<Department> departmentList) {
-        this.departmentList = departmentList;
+    public void setTeamList(List<Team> teamList) {
+        this.teamList = teamList;
+    }
+
+    public Division getDivisionId() {
+        return divisionId;
+    }
+
+    public void setDivisionId(Division divisionId) {
+        this.divisionId = divisionId;
+    }
+
+    public Employee getHod() {
+        return hod;
+    }
+
+    public void setHod(Employee hod) {
+        this.hod = hod;
     }
 
     @Override
@@ -125,10 +137,10 @@ public class Division implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Division)) {
+        if (!(object instanceof Department)) {
             return false;
         }
-        Division other = (Division) object;
+        Department other = (Department) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -137,7 +149,7 @@ public class Division implements Serializable {
 
     @Override
     public String toString() {
-        return "com.immaculateconsultingstaffmanagement.Division[ id=" + id + " ]";
+        return "com.immaculateconsultingstaffmanagement.Department[ id=" + id + " ]";
     }
     
 }

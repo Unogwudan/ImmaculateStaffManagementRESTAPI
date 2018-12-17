@@ -1,6 +1,6 @@
 package com.immaculateconsulting.boundary;
 
-import com.immaculateconsulting.entiities.Staff;
+import com.immaculateconsulting.entities.Employee;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -10,7 +10,7 @@ import javax.persistence.PersistenceContext;
  * @author Unogwudan
  */
 @Stateless
-public class StaffFacade extends AbstractFacade<Staff> implements StaffFacadeLocal {
+public class EmployeeFacade extends AbstractFacade<Employee> implements EmployeeFacadeLocal {
 
     @PersistenceContext(unitName = "com.mycompany_ImmaculateConsultingStaffManagement_war_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -20,8 +20,8 @@ public class StaffFacade extends AbstractFacade<Staff> implements StaffFacadeLoc
         return em;
     }
 
-    public StaffFacade() {
-        super(Staff.class);
+    public EmployeeFacade() {
+        super(Employee.class);
     }
     
 }

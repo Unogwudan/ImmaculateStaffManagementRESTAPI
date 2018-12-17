@@ -1,6 +1,8 @@
 package com.immaculateconsulting.boundary;
 
-import com.immaculateconsulting.entiities.TeamMembers;
+import com.immaculateconsulting.entities.Team;
+import com.immaculateconsulting.entities.TeamMembers;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -22,6 +24,13 @@ public class TeamMembersFacade extends AbstractFacade<TeamMembers> implements Te
 
     public TeamMembersFacade() {
         super(TeamMembers.class);
+    }
+
+    @Override
+    public List<TeamMembers> findByTeam(Integer id) {
+       return em.createNamedQuery("TeamMembers.findByTeam", TeamMembers.class)
+                .setParameter("teamId", em.find(Team.class, id))
+                .getResultList();
     }
     
 }
